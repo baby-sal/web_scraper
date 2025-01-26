@@ -1,4 +1,5 @@
-###https://www.byperth.com/2018/04/25/guide-web-scraping-101-what-you-need-to-know-and-how-to-scrape-with-python-selenium-webdriver/
+"""https://books.toscrape.com/"""
+
 from selenium import webdriver # allow launching browser
 from selenium.webdriver.chrome.service import Service #handles chromedriver service
 from selenium.webdriver.common.by import By # allow search with parameters
@@ -11,7 +12,7 @@ chromedriver_path = "/Users/sallydavies/Downloads/chromedriver-mac-arm64/chromed
 
 #prepare the code for easily opening a new browser window
 driver_option = webdriver.ChromeOptions()
-driver_option.add_argument("--incognito")
+driver_option.headless = True #will run without opening a Window
 
 def create_webdriver():
     try:
@@ -21,22 +22,21 @@ def create_webdriver():
     except Exception as error:
         print(f"Error initialising ChromeDrive: {error}")
         return None
-
-
-#open the browser
+    
 browser = create_webdriver()
+
 if browser:
     try:
-        browser.get("https://github.com/collections/machine-learning")
+        browser.get("https://books.toscrape.com/")
         print("Page title", browser.title)
         #find all book titles
-        projects = browser.find_elements(By.XPATH, "//h1[@class='h3 lh-condensed']")
-        #create a dictionary to store the project data 
-        project_list = {}
-        #loop through the projects
-        for proj in projects:
-            proj_name = proj.text # Project name
-            proj_url = proj.find_element(By.XPATH, "a").get_attribute("href") # Project URL
+        book_titles = browser.find_elements(By.XPATH, "h3 > a")
+        #create a dictionary to store the books
+        book_list = {}
+        #loop through the books
+        for book in book_titles:
+            book_name = book.text # Project name
+            book_prive = book.find_element(By.XPATH, "<p class="price_color">").get_attribute("href") # Project URL
             #add project name and URL to the dictionary 
             project_list[proj_name] = proj_url
 
@@ -54,10 +54,3 @@ if browser:
         browser.quit
 else:
     print("Failed to initialise WebDriver")
-
-
-
-
-
-
-# Extract information for each project
