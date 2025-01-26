@@ -1,0 +1,4 @@
+pip install selenium
+pip install pandas
+download chromedriver, may be an error message to not allow it to open, go to System Settings > Security > Allow 
+
